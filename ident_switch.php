@@ -6,7 +6,7 @@
  *
  * @version 4.4.2
  * @author Boris Gulay
- * @url 
+ * @url
  */
 class ident_switch extends rcube_plugin
 {
@@ -44,7 +44,7 @@ class ident_switch extends rcube_plugin
 		foreach (rcube_storage::$folder_types as $type)
 		{
 			$key = $type . '_mbox_default' . self::MY_POSTFIX;
-			if (!$_SESSION[$key])
+			if (!isset($_SESSION[$key]))
 				$_SESSION[$key] = $rc->config->get($type . '_mbox');
 		}
 	}
@@ -106,7 +106,7 @@ class ident_switch extends rcube_plugin
 			$iid = -1;
 		elseif (ctype_digit($iid_s))
 			$iid = intval($iid_s);
-		
+
 		$accNames = array(isset($_SESSION['global_alias']) ? $_SESSION['global_alias'] : $rc->user->data['username']);
 		$accValues = array(-1);
 		$accSelected = -1;
@@ -168,7 +168,7 @@ class ident_switch extends rcube_plugin
 			} else {
 				$iid = intval($requestFrom);
 				if ($iid == 0) {
-					self::write_log('falling back to original default config as _from post field is no integer: ' . $_POST['_from']); 
+					self::write_log('falling back to original default config as _from post field is no integer: ' . $_POST['_from']);
 					return $args;
 				}
 			}
