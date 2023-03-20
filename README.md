@@ -1,4 +1,6 @@
-bug fix in ident_switch.php
+Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fix.
+Affected files: ident_switch.php
+---------------------------------------------------------
 
 # ident_switch
 ident_switch plugin for Roundcube
