@@ -687,8 +687,9 @@ class ident_switch extends rcube_plugin
 					$rc->session->remove($k);
 				}
 			}
-			$delimiter = isset($config['imap_delimiter']) ? $config['imap_delimiter']:'.';
-            $_SESSION['imap_delimiter'] = $delimiter;
+			if (!($delimiter = $rc->config->get('imap_delimiter')))
+				$delimiter = '.';
+			$_SESSION['imap_delimiter'] = $delimiter;
 			$_SESSION['username'] = $rc->user->data['username'];
 			$_SESSION['password'] = $_SESSION['password' . self::MY_POSTFIX];
 			$_SESSION['iid' . self::MY_POSTFIX] = -1;
