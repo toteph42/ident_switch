@@ -756,7 +756,7 @@ class ident_switch extends rcube_plugin
 				if ($ssl && strncasecmp($host, $hostProtocol, strlen($hostProtocol)) !== 0)
 					$host = $hostProtocol . $host;
 
-				$delimiter = isset($r['imap_delimiter']) ? $r['imap_delimiter'] : '.'; // Default delimiter here
+				$delimiter = isset($r['imap_delimiter']) ? $r['imap_delimiter'] : $rc->config->get('imap_delimiter'); // Default delimiter here
 
 				$_SESSION['storage_host'] = $host;
 				$_SESSION['storage_ssl'] = $ssl;
