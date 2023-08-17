@@ -37,6 +37,8 @@ class ident_switch extends rcube_plugin
 		$this->add_hook('template_object_composeheaders', array($this, 'on_template_object_composeheaders'));
 		$this->add_hook('preferences_list', array($this, 'on_special_folders_form'));
 		$this->add_hook('preferences_save', array($this, 'on_special_folders_update'));
+		// TODO: Check if LDAP is used
+		$this->add_hook('storage_connect', array($this, 'override_ldap_password'));
 
 		$this->register_action('plugin.ident_switch.switch', array($this, 'on_switch'));
 
@@ -528,6 +530,30 @@ class ident_switch extends rcube_plugin
 		}
 		return $args;
 	}
+
+	function override_ldap_password($args)
+        {
+                $rc = rcmail::get_instance();
+
+                // Do not do anything for default identity
+                if (strcasecmp($args['user'], $rc->user->data['username']) === 0)
+                        return $args;
+
+                $sql = 'SELECT password FROM ' . $rc->db->table_name(self::TABLE) . ' WHERE username = ?';
+                $q = $rc->db->query($sql, $args['user']);
+                $r = $rc->db->fetch_assoc($q);
+
+                if(is_array($r)) {
+                        if($r['password']) {
+                                self::write_log('Override imap password for user "' . $args['user'] . '"');
+                                // Replace 'new_password' with the password you want to use
+                                $args['pass'] = $rc->decrypt($r['password']);
+                        }
+                }
+
+                return $args;
+        }
+
 
 	private static function check_field_values()
 	{
