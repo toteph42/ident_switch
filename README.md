@@ -5,7 +5,8 @@
 ![](https://img.shields.io/packagist/dt/toteph42/ident_switch.svg)
 
 ---------------------------------------------------------
-## Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fixes. ##
+## Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fixes. 
+Feel free to submit any issues you have.##
 ---------------------------------------------------------
 
 ident_switch plugin for Roundcube
