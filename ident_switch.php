@@ -10,7 +10,9 @@
  */
 class ident_switch extends rcube_plugin
 {
-	public $task='?(?!login|logout).*';
+	public $task = '?(?!login|logout).*';
+
+	public $logging = true;
 
 	const TABLE = 'ident_switch';
 	const MY_POSTFIX = '_iswitch';
@@ -47,6 +49,8 @@ class ident_switch extends rcube_plugin
 			if (!isset($_SESSION[$key]))
 				$_SESSION[$key] = $rc->config->get($type . '_mbox');
 		}
+		$this->load_config(); // config.inc.php
+		$this->logging = rcmail::get_instance()->config->get('ident_switch.logging', true);
 	}
 
 	function on_startup($args)
@@ -687,6 +691,7 @@ class ident_switch extends rcube_plugin
 					$rc->session->remove($k);
 				}
 			}
+			$v; // disable Eclipse warning
 			if (!($delimiter = $rc->config->get('imap_delimiter')))
 				$delimiter = '.';
 			$_SESSION['imap_delimiter'] = $delimiter;
@@ -881,6 +886,7 @@ class ident_switch extends rcube_plugin
 
 	private static function write_log($txt)
 	{
-		rcmail::get_instance()->write_log('ident_switch', $txt);
+		if ($this->logging)
+			rcmail::get_instance()->write_log('ident_switch', $txt);
 	}
 }

@@ -27,3 +27,6 @@ $rcmail_config['ident_switch.preconfig'] = array(
 		'user' => 'mbox',
 	),
 );
+
+// enable this to get a log file created
+$rcmail_config['ident_switch.logging'] = false;

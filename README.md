@@ -1,8 +1,13 @@
-Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fix.
-Affected files: ident_switch.php
+# ident_switch
+
+![](https://img.shields.io/packagist/v/toteph42/ident_switch.svg)
+![](https://img.shields.io/packagist/l/toteph42/ident_switch.svg)
+![](https://img.shields.io/packagist/dt/toteph42/ident_switch.svg)
+
+---------------------------------------------------------
+## Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fixes. ##
 ---------------------------------------------------------
 
-# ident_switch
 ident_switch plugin for Roundcube
 
 This plugin allows users to switch between different accounts (including remote) in single Roundcube session like this:
