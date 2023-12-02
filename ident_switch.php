@@ -12,7 +12,7 @@ class ident_switch extends rcube_plugin
 {
 	public $task = '?(?!login|logout).*';
 
-	public $logging = true;
+	private static $logging = true;
 
 	const TABLE = 'ident_switch';
 	const MY_POSTFIX = '_iswitch';
@@ -886,7 +886,7 @@ class ident_switch extends rcube_plugin
 
 	private static function write_log($txt)
 	{
-		if ($this->logging)
+		if (self::$logging)
 			rcmail::get_instance()->write_log('ident_switch', $txt);
 	}
 }
