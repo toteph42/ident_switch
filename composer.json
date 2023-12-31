@@ -2,7 +2,7 @@
 	"name" : "toteph42/ident_switch",
 	"type" : "roundcube-plugin",
 	"description" : "This plugin allows users to switch between different accounts (including remote) in single Roundcube session.",
-	"homepage" : "https://bitbucket.org/BoresExpress/ident_switch",
+	"homepage" : "https://github.ccom/totep42/ident_switch",
 	"keywords" : [
 		"identity",
 		"imap",
@@ -11,14 +11,14 @@
 	],
 	"license" : "GPL-3.0+",
 	"authors" : [{
-			"name" : "Boris Gulay",
-			"email" : "boris@gulay.name",
+			"name" : "Florian Däumling",
+			"email" : "toteph42@github.com",
 			"role" : "Developer"
 		}
 	],
 	"repositories" : [{
 			"type" : "composer",
-			"url" : "http://plugins.roundcube.net"
+			"url" : "https://plugins.roundcube.net"
 		}
 	],
 	"require" : {
@@ -30,7 +30,7 @@
 		"elm/identity_smtp" : "*"
 	},
 	"support" : {
-		"issues" : "https://bitbucket.org/BoresExpress/ident_switch/issues"
+		"issues" : "https://github.ccom/totep42/ident_switch/issues"
 	},
 	"extra" : {
 		"roundcube" : {

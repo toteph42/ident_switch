@@ -4,7 +4,7 @@
  *
  * This plugin allows fast switching between accounts.
  *
- * @version 4.4.2
+ * @version 4.4.8
  * @author Boris Gulay
  * @url
  */
@@ -50,7 +50,7 @@ class ident_switch extends rcube_plugin
 				$_SESSION[$key] = $rc->config->get($type . '_mbox');
 		}
 		$this->load_config(); // config.inc.php
-		$this->logging = rcmail::get_instance()->config->get('ident_switch.logging', true);
+		self::$logging = rcmail::get_instance()->config->get('ident_switch.logging', true);
 	}
 
 	function on_startup($args)
