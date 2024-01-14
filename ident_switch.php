@@ -101,7 +101,7 @@ class ident_switch extends rcube_plugin
 	private function render_switch($rc, $args)
 	{
 		// Currently selected identity
-		$iid_s = $_SESSION['iid' . self::MY_POSTFIX];
+		$iid_s = isset($_SESSION['iid' . self::MY_POSTFIX]) ? $_SESSION['iid' . self::MY_POSTFIX] : '-1';
 
 		$iid = 0;
 		if (is_int($iid_s))
