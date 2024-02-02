@@ -4,13 +4,15 @@
  *
  * This plugin allows fast switching between accounts.
  *
- * @version 4.4.2
+ * @version 4.4.8
  * @author Boris Gulay
  * @url
  */
 class ident_switch extends rcube_plugin
 {
-	public $task='?(?!login|logout).*';
+	public $task = '?(?!login|logout).*';
+
+	private static $logging = true;
 
 	const TABLE = 'ident_switch';
 	const MY_POSTFIX = '_iswitch';
@@ -49,6 +51,8 @@ class ident_switch extends rcube_plugin
 			if (!isset($_SESSION[$key]))
 				$_SESSION[$key] = $rc->config->get($type . '_mbox');
 		}
+		$this->load_config(); // config.inc.php
+		self::$logging = rcmail::get_instance()->config->get('ident_switch.logging', true);
 	}
 
 	function on_startup($args)
@@ -99,7 +103,7 @@ class ident_switch extends rcube_plugin
 	private function render_switch($rc, $args)
 	{
 		// Currently selected identity
-		$iid_s = $_SESSION['iid' . self::MY_POSTFIX];
+		$iid_s = isset($_SESSION['iid' . self::MY_POSTFIX]) ? $_SESSION['iid' . self::MY_POSTFIX] : '-1';
 
 		$iid = 0;
 		if (is_int($iid_s))
@@ -713,6 +717,7 @@ class ident_switch extends rcube_plugin
 					$rc->session->remove($k);
 				}
 			}
+			$v; // disable Eclipse warning
 			if (!($delimiter = $rc->config->get('imap_delimiter')))
 				$delimiter = '.';
 			$_SESSION['imap_delimiter'] = $delimiter;
@@ -907,6 +912,7 @@ class ident_switch extends rcube_plugin
 
 	private static function write_log($txt)
 	{
-		rcmail::get_instance()->write_log('ident_switch', $txt);
+		if (self::$logging)
+			rcmail::get_instance()->write_log('ident_switch', $txt);
 	}
 }
