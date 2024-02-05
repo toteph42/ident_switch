@@ -5,7 +5,7 @@
 ![](https://img.shields.io/packagist/dt/toteph42/ident_switch.svg)
 
 ---------------------------------------------------------
-# I created this fork, since oroginal plugin is very long not been maintained. Feel free to submit any issues or commits you have and I'll try to fix / implent them.
+## I created this fork, since original plugin is very long not been maintained. Feel free to submit any issues or commits you have and I'll try to fix / implent them.
 ---------------------------------------------------------
 
 This plugin allows users to switch between different accounts (including remote) in single Roundcube session like this:
