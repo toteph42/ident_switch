@@ -39,12 +39,14 @@ class ident_switch extends rcube_plugin
 		$this->add_hook('template_object_composeheaders', array($this, 'on_template_object_composeheaders'));
 		$this->add_hook('preferences_list', array($this, 'on_special_folders_form'));
 		$this->add_hook('preferences_save', array($this, 'on_special_folders_update'));
-		// TODO: Check if LDAP is used
-		$this->add_hook('storage_connect', array($this, 'override_ldap_password'));
+
+		$rc = rcmail::get_instance();
+		// check for LDAP
+		if ($rc->config->get('ldapAliasSync', null))
+			$this->add_hook('storage_connect', array($this, 'override_ldap_password'));
 
 		$this->register_action('plugin.ident_switch.switch', array($this, 'on_switch'));
 
-		$rc = rcmail::get_instance();
 		foreach (rcube_storage::$folder_types as $type)
 		{
 			$key = $type . '_mbox_default' . self::MY_POSTFIX;
@@ -92,7 +94,7 @@ class ident_switch extends rcube_plugin
 			$this->render_switch($rc, $args);
 			break;
 		case 'settings':
-			$this->include_script('ident_switch-form.js');
+			$this->include_script('ident_switch-form-min.js');
 			break;
 		}
 
@@ -149,7 +151,7 @@ class ident_switch extends rcube_plugin
 		// Render UI if user has extra accounts
 		if (count($accValues) > 1)
 		{
-			$this->include_script('ident_switch-switch.js');
+			$this->include_script('ident_switch-switch-min.js');
 
 			$select = new html_select(array(
 				'id' => 'plugin-ident_switch-account',
@@ -453,11 +455,11 @@ class ident_switch extends rcube_plugin
 		{
 			$no_override = array_flip((array)$rc->config->get('dont_override'));
 			$onchange = "if ($(this).val() == 'INBOX') $(this).val('')";
-			$select = $rc->folder_selector(array('noselection' => '---',
-																					 'realnames' => true,
-																					 'maxlength' => 30,
-																					 'folder_filter' => 'mail',
-																					 'folder_rights' => 'w'));
+			$select = rcmail_action::folder_selector(array('noselection' => '---',
+																			'realnames' => true,
+																			'maxlength' => 30,
+																			'folder_filter' => 'mail',
+																			'folder_rights' => 'w'));
 
 			$sql = 'SELECT label FROM ' . $rc->db->table_name(self::TABLE) . ' WHERE iid = ? AND user_id = ?';
 			$q = $rc->db->query($sql, $_SESSION['iid' . self::MY_POSTFIX], $rc->user->ID);

@@ -54,6 +54,11 @@ $labels['form.smtp.port'] = 'Port';
 // Authorization required
 $labels['form.smtp.auth'] = 'Genehmigung benötigt';
 
+// As IMAP
+$labels['form.smtp.auth.imap'] = 'Wie IMAP';
+
+// None
+$labels['form.smtp.auth.none'] = 'Keine';
 
 // Errors
 
