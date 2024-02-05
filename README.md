@@ -1,14 +1,12 @@
-# ident_switch
+# ident_switch plugin for Roundcube
 
 ![](https://img.shields.io/packagist/v/toteph42/ident_switch.svg)
 ![](https://img.shields.io/packagist/l/toteph42/ident_switch.svg)
 ![](https://img.shields.io/packagist/dt/toteph42/ident_switch.svg)
 
 ---------------------------------------------------------
-# Unfortunately maintainer is not fixing bugs. Therefore I created this fork for bug fixes. Feel free to submit any issues you have and I'll try to fix them.
+# I created this fork, since oroginal plugin is very long not been maintained. Feel free to submit any issues or commits you have and I'll try to fix / implent them.
 ---------------------------------------------------------
-
-ident_switch plugin for Roundcube
 
 This plugin allows users to switch between different accounts (including remote) in single Roundcube session like this:
 
@@ -36,11 +34,8 @@ This plugin allows users to switch between different accounts (including remote)
 * **SMTP**
     * **Server host name** - host name for imap server. If left blank 'localhost' will be used.
     * **Port** - port on server to connect to. If left blank 587 will be used.
-
+    
 ### Version compatibility ###
-* Versions 1.X (not supported any more) - for Roundcube v1.1
-* Versions 2.X (not supported any more) - for Roundcube v1.2
-* Versions 3.X (not supported any more) - for Roundcube v1.3
-* Versions 4.x - for Roundcube v1.3, 1.4 and 1.5.
+* Versions 4.x - for Roundcube v1.3, 1.4 and 1.6.
 
 Please specify version like "~2.0" in your composer.json file for ident_switch requirement. In this case you will stay inside compatible branch until you manually update your Roundcube installation.
