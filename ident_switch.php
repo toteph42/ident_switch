@@ -4,8 +4,6 @@
  *
  * This plugin allows fast switching between accounts.
  *
- * @version 4.4.8
- * @author Boris Gulay
  * @url
  */
 class ident_switch extends rcube_plugin
@@ -259,8 +257,8 @@ class ident_switch extends rcube_plugin
 		$prefix = 'ident_switch.form.smtp.';
 
 		$authType = new html_select(array('name' => "_{$prefix}auth"));
-		$authType->add($this->gettext('form.smtp.auth.imap'), self::SMTP_AUTH_IMAP);
-		$authType->add($this->gettext('form.smtp.auth.none'), self::SMTP_AUTH_NONE);
+		$authType->add($this->gettext('form.smtp.auth.imap'), (string)(self::SMTP_AUTH_IMAP));
+		$authType->add($this->gettext('form.smtp.auth.none'), (string)(self::SMTP_AUTH_NONE));
 
 		return array(
 			$prefix . 'host' => array('type' => 'text', 'size' => 64, 'placeholder' => 'localhost'),
@@ -274,7 +272,7 @@ class ident_switch extends rcube_plugin
 		$rc = rcmail::get_instance();
 
 		// Do not show options for default identity
-		if (strcasecmp($args['record']['email'], $rc->user->data['username']) === 0)
+		if(	strcasecmp($args['record']['email'], $rc->user->data['username']) === 0)
 			return $args;
 
 		$this->add_texts('localization');
@@ -305,7 +303,8 @@ class ident_switch extends rcube_plugin
 
 			);
 			foreach ($row as $k => $v)
-				$record['ident_switch.form.' . $dbToForm[$k]] = $v;
+				if (isset($dbToForm[$k]))
+					$record['ident_switch.form.' . $dbToForm[$k]] = $v;
 
 			// Parse flags
 			$record['ident_switch.form.common.enabled'] = !!($row['flags'] & self::DB_ENABLED);
@@ -354,7 +353,7 @@ class ident_switch extends rcube_plugin
 		}
 
 		$data = self::check_field_values();
-		if ($data['err'])
+		if (isset($data['err']))
 		{
 			$this->add_texts('localization');
 			$args['abort'] = true;
@@ -377,7 +376,7 @@ class ident_switch extends rcube_plugin
 			return $args;
 
 		if (!self::get_field_value('common', 'enabled', false))
-				return $args;
+			return $args;
 
 		$data = self::check_field_values();
 		if ($data['err'])
@@ -560,7 +559,6 @@ class ident_switch extends rcube_plugin
                 return $args;
         }
 
-
 	private static function check_field_values()
 	{
 		$retVal = array();
@@ -580,12 +578,12 @@ class ident_switch extends rcube_plugin
 					$retVal['err'] = 'port.num';
 				else
 				{
-					if ($retVal['imap.port'] && ($retVal['imap.port'] <= 0 || $retVal['imap.port'] > 65535))
+					if (isset($retVal['imap.port']) && ($retVal['imap.port'] <= 0 || $retVal['imap.port'] > 65535))
 						$retVal['err'] = 'port.range';
 					else
 					{
 						$retVal['imap.delimiter'] = self::get_field_value('imap', 'delimiter');
-						if (strlen($retVal['imap.delimiter']) > 1)
+						if ($retVal['imap.delimiter'] && strlen($retVal['imap.delimiter']) > 1)
 							$retVal['err'] = 'delim.long';
 						else
 						{
@@ -604,7 +602,7 @@ class ident_switch extends rcube_plugin
 										$retVal['err'] = 'port.num';
 									else
 									{
-										if ($retVal['smtp.port'] && ($retVal['smtp.port'] <= 0 || $retVal['smtp.port'] > 65535))
+										if (isset($retVal['smtp.port']) && ($retVal['smtp.port'] <= 0 || $retVal['smtp.port'] > 65535))
 											$retVal['err'] = 'port.range';
 										else
 										{
@@ -644,7 +642,14 @@ class ident_switch extends rcube_plugin
 		if (!$trim)
 			return $retVal;
 
-		return self::ntrim($retVal);
+		if (is_null($retVal))
+			return null;
+
+		$s = trim($retVal);
+		if (!$s)
+			return null;
+
+		return $retVal;
 	}
 
 	private static function save_field_values($rc, $data)
@@ -656,14 +661,18 @@ class ident_switch extends rcube_plugin
 		{ // Record already exists, will update it
 			$sql = 'UPDATE ' .
 				$rc->db->table_name(self::TABLE) .
-				' SET flags = ?, label = ?, imap_host = ?, imap_port = ?, imap_delimiter = ?, username = ?, password = ?, smtp_host = ?, smtp_port = ?, smtp_auth = ?, user_id = ?, iid = ?' .
+				' SET flags = ?, label = ?, imap_host = ?, imap_port = ?, imap_delimiter = ?,'.
+				' username = ?, password = ?, smtp_host = ?, smtp_port = ?, smtp_auth = ?,'.
+				' user_id = ?, iid = ?' .
 				' WHERE id = ?';
 		}
 		else if ($data['flags'] & self::DB_ENABLED)
 		{ // No record exists, create new one
 			$sql = 'INSERT INTO ' .
 				$rc->db->table_name(self::TABLE) .
-				'(flags, label, imap_host, imap_port, imap_delimiter, username, password, smtp_host, smtp_port, smtp_auth, user_id, iid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+				'(flags, label, imap_host, imap_port, imap_delimiter, username, password,'.
+				' smtp_host, smtp_port, smtp_auth, user_id, iid)'.
+				' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		}
 
 		if ($sql)
@@ -672,6 +681,7 @@ class ident_switch extends rcube_plugin
 			if ($data['imap.pass'] != $r['password'])
 				$data['imap.pass'] = $rc->encrypt($data['imap.pass']);
 
+			$rc->db->set_debug(true);
 			$rc->db->query(
 				$sql,
 				$data['flags'],
@@ -840,7 +850,7 @@ class ident_switch extends rcube_plugin
 		$this->load_config(); // config.inc.php
 
 		$cfg = rcmail::get_instance()->config->get('ident_switch.preconfig', array());
-		$cfg = $cfg[$dom];
+		$cfg = isset($cfg[$dom]) ? $cfg[$dom] : false;
 
 		if ($cfg)
 		{
@@ -852,6 +862,9 @@ class ident_switch extends rcube_plugin
 
 	private function apply_preconfig(&$record)
 	{
+		if (!isset($record['email']))
+			return false;
+
 		$email = $record['email'];
 		$cfg = $this->get_preconfig($email);
 		if (is_array($cfg))
@@ -898,18 +911,6 @@ class ident_switch extends rcube_plugin
 		}
 
 		return false;
-	}
-
-	private static function ntrim($str)
-	{
-		if (is_null($str))
-			return $str;
-
-		$s = trim($str);
-		if (!$s)
-			return null;
-
-		return $s;
 	}
 
 	private static function write_log($txt)
